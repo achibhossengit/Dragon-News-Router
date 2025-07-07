@@ -1,27 +1,66 @@
-import React from "react";
-import { Link } from "react-router";
+import React, { use } from "react";
+import { Link, useNavigate } from "react-router";
+import { AuthContext } from "../provider/AuthProvider";
 
 const Register = () => {
+  const { createUser, setUser } = use(AuthContext);
+  const navigate = useNavigate();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const name = e.target.name.value;
+    const email = e.target.email.value;
+    const photoURL = e.target.photoURL.value;
+    const password = e.target.password.value;
+    console.log({ name, email, photoURL, password });
+    createUser(email, password)
+      .then((result) => {
+        setUser(result.user);
+        navigate("/auth/login");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
         <div className="card-body">
-          <fieldset className="fieldset">
+          <form onSubmit={handleSubmit} className="fieldset">
             {/* Name */}
             <label className="label">Name</label>
-            <input type="text" className="input bg-base-200" placeholder="Name" />
-            
+            <input
+              name="name"
+              type="text"
+              className="input bg-base-200"
+              placeholder="Name"
+            />
+
             {/* Photo url */}
             <label className="label">Photo URL</label>
-            <input type="text" className="input bg-base-200" placeholder="Enter your hosted Photo url" />
-            
+            <input
+              name="photoURL"
+              type="text"
+              className="input bg-base-200"
+              placeholder="Enter your hosted Photo url"
+            />
+
             {/* email */}
             <label className="label">Email</label>
-            <input type="email" className="input bg-base-200" placeholder="Email" />
-            
+            <input
+              name="email"
+              type="email"
+              className="input bg-base-200"
+              placeholder="Email"
+            />
+
             {/* password */}
             <label className="label">Password</label>
-            <input type="password" className="input bg-base-200" placeholder="Password" />
+            <input
+              name="password"
+              type="password"
+              className="input bg-base-200"
+              placeholder="Password"
+            />
 
             <button className="btn btn-neutral mt-4">Register</button>
             <div>
@@ -35,7 +74,7 @@ const Register = () => {
                 </Link>
               </p>
             </div>
-          </fieldset>
+          </form>
         </div>
       </div>{" "}
     </div>
