@@ -18,7 +18,8 @@ const router = createBrowserRouter([
       {
         path: "/category/:id",
         element: <CategoryNews></CategoryNews>,
-        loader: () => fetch("/news.json"),
+        loader: async() => await fetch("/news.json"),
+        hydrateFallbackElement: <p>Loading..</p>,
       },
     ],
   },
