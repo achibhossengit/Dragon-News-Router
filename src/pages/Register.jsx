@@ -1,9 +1,10 @@
-import React, { use } from "react";
+import React, { use, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { AuthContext } from "../provider/AuthProvider";
 
 const Register = () => {
   const { createUser, setUser } = use(AuthContext);
+  const [nameError, setNameError] = useState("");
   const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -12,6 +13,13 @@ const Register = () => {
     const photoURL = e.target.photoURL.value;
     const password = e.target.password.value;
     console.log({ name, email, photoURL, password });
+
+    if (name.length < 5) {
+      setNameError("Name should be at least 5 charecters");
+      return;
+    } else {
+      setNameError("");
+    }
     createUser(email, password)
       .then((result) => {
         setUser(result.user);
@@ -34,6 +42,7 @@ const Register = () => {
               className="input bg-base-200"
               placeholder="Name"
             />
+            {nameError && <p className="text-xs text-error">{nameError}</p>}
 
             {/* Photo url */}
             <label className="label">Photo URL</label>
@@ -42,6 +51,7 @@ const Register = () => {
               type="text"
               className="input bg-base-200"
               placeholder="Enter your hosted Photo url"
+              required
             />
 
             {/* email */}
@@ -51,6 +61,7 @@ const Register = () => {
               type="email"
               className="input bg-base-200"
               placeholder="Email"
+              required
             />
 
             {/* password */}
@@ -60,6 +71,7 @@ const Register = () => {
               type="password"
               className="input bg-base-200"
               placeholder="Password"
+              required
             />
 
             <button className="btn btn-neutral mt-4">Register</button>
